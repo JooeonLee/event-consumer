@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>FCM Token Test</title>
+</head>
+<body>
+<h1>FCM Web Token 발급 테스트</h1>
+<button id="btn">FCM 토큰 발급</button>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-messaging.js";
+
+    // 🔹 Firebase 웹 앱 설정 (네가 가져온 그대로)
+    const firebaseConfig = {
+        apiKey: "AIzaSyD6DzX8KNIP6tqXQ9Ued-k0puanTsaa9X4",
+        authDomain: "gray-pick-9183c.firebaseapp.com",
+        projectId: "gray-pick-9183c",
+        messagingSenderId: "673813814160",
+        appId: "1:673813814160:web:075ed466bf3f206d4f7115"
+    };
+
+    // Firebase 초기화
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    document.getElementById("btn").onclick = async () => {
+        try {
+            // 1️⃣ 알림 권한 요청
+            const permission = await Notification.requestPermission();
+            if (permission !== "granted") {
+                alert("알림 권한이 거부되었습니다.");
+                return;
+            }
+
+            // 2️⃣ FCM 토큰 발급
+            const token = await getToken(messaging, {
+                vapidKey: "BDPYMHziSEO7GVdFMxo8anwa1bat5OBENwhOnVycqC5RESlOV7qidM-Y9ilfZHgnIz_5LDDR7C2BKWyeVjHZp-0"
+            });
+
+            if (!token) {
+                console.error("❌ 토큰 발급 실패");
+                alert("토큰이 null입니다. 콘솔 확인");
+                return;
+            }
+
+            console.log("🔥 FCM TOKEN:", token);
+            alert("콘솔에 FCM 토큰이 출력되었습니다.");
+        } catch (e) {
+            console.error("❌ FCM 토큰 발급 오류", e);
+        }
+    };
+</script>
+</body>
+</html>
+
