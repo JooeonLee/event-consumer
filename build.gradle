@@ -1,61 +1,29 @@
-//plugins {
-//    id 'org.springframework.boot' version '3.3.7' apply false
-//    id 'io.spring.dependency-management' version '1.1.6' apply false
-//}
-//
-//allprojects {
-//    group = 'com.graypick'
-//    version = '0.0.1-SNAPSHOT'
-//    repositories { mavenCentral() }
-//}
-//
-//subprojects {
-//    apply plugin: 'java'
-//    apply plugin: 'io.spring.dependency-management'
-//
-//    java {
-//        toolchain {
-//            languageVersion = JavaLanguageVersion.of(17)
-//        }
-//    }
-//
-//    tasks.withType(Test).configureEach {
-//        useJUnitPlatform()
-//    }
-//}
-//
-////tasks.register("classes") {
-////    dependsOn(subprojects.collect { it.tasks.named("classes") })
-////}
-////
-////plugins.withId("org.springframework.boot") {
-////    tasks.named("bootJar") { enabled = false }
-////}
-////plugins.withId("java") {
-////    tasks.named("jar") { enabled = false }
-////}
-
-
-
-
 plugins {
     id 'org.springframework.boot' version '3.3.7' apply false
     id 'io.spring.dependency-management' version '1.1.6' apply false
-    id 'java' // 루트 프로젝트에도 java 플러그인을 적용하면 IDE 지원이 더 원활합니다.
+    id 'java'
 }
 
-// 모든 모듈(루트 포함) 공통 설정
 allprojects {
     group = 'com.graypick'
     version = '0.0.1-SNAPSHOT'
-    repositories { mavenCentral() }
+    //repositories { mavenCentral() }
 }
 
-// 하위 모듈 전용 설정
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // spring boot bom 공유
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:3.3.7"
+        }
+    }
 
     java {
         toolchain {
@@ -68,14 +36,5 @@ subprojects {
     }
 }
 
-// 루트 프로젝트에서는 JAR 파일을 생성하지 않음
-plugins.withType(org.springframework.boot.gradle.plugin.SpringBootPlugin) {
-    tasks.named("bootJar") {
-        enabled = false
-    }
-}
-
-tasks.named("jar") {
-    enabled = false
-}
-
+/* 루트는 빌드 전용 */
+tasks.named("jar") { enabled = false }

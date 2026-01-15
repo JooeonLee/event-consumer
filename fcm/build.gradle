@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+
+    /* ===============================
+       FCM
+       =============================== */
+    api 'com.google.firebase:firebase-admin:9.2.0'
+
+    /* ===============================
+       Spring
+       =============================== */
+    implementation 'org.springframework:spring-context'
+
+    /* ===============================
+       Lombok
+       =============================== */
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    /* ===============================
+       jakarta
+       =============================== */
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+}
